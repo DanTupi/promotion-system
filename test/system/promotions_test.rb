@@ -97,4 +97,53 @@ class PromotionsTest < ApplicationSystemTestCase
       assert_link 'Voltar'
     end
 
+    test 'create and attributes cannot be blank' do
+      visit root_path
+      click_on 'Promoções'
+      click_on 'Registrar uma promoção'
+      # fill_in 'Nome', with: ''
+      # fill_in 'Descrição', with: ''
+      # fill_in 'Código', with: ''
+      # fill_in 'Desconto', with: ''
+      # fill_in 'Quantidade de cupons', with: ''
+      # fill_in 'Data de término', with: ''
+      click_on 'Criar promoção'
+  
+      assert_text 'não pode ficar em branco', count: 5
+    end
+  
+    test 'create and code/name must be unique' do
+      Promotion.create!(name: 'Natal', description: 'Promoção de Natal',
+                        code: 'NATAL10', discount_rate: 10, coupon_quantity: 100,
+                        expiration_date: '22/12/2033')
+  
+      visit root_path
+      click_on 'Promoções'
+      click_on 'Registrar uma promoção'
+      fill_in 'Código', with: 'NATAL10'
+      fill_in 'Nome', with: 'Natal'
+      click_on 'Criar promoção'
+  
+      assert_text 'deve ser único'
+    end
+
+    test 'generate coupons for a promotion' do
+      promotion = Promotion.create!(name: 'Natal',
+                                  description: 'Promoção de Natal',
+                                  code: 'NATAL10', discount_rate: 10,
+                                  coupon_quantity: 100, 
+                                  expiration_date: '22/12/2033')
+    visit promotion_path(promotion)
+    click_on 'Gerar cupons'
+
+    #assert
+    assert_text 'Cupons gerados com sucesso'
+    assert_no_link 'Gerar cupons'
+    assert_no_text 'NATAL10-0000'
+    assert_text 'NATAL10-0001'
+    assert_text 'NATAL10-0002'
+    assert_text 'NATAL10-0100'
+    assert_no_text 'NATAL10-0101'
+
+    end
 end
