@@ -13,6 +13,8 @@
     <dd><%= @promotion.coupon_quantity %></dd>
 </dl>
 
+<div><%= link_to 'Editar Promoção', edit_promotion_path(@promotion) %></div>
+
 <% if @promotion.coupons.empty? %>
     <%= link_to 'Gerar cupons', generate_coupons_promotion_path(@promotion), method: :post%>
 <% end %>

@@ -32,6 +32,22 @@ class PromotionsController < ApplicationController
         redirect_to @promotion
     end
 
+    def edit
+        @promotion = Promotion.find(params[:id])
+    end
+
+    def update
+        @promotion = Promotion.update(promotion_params)
+        # if @promotion.save
+        #     redirect_to @promotion
+        # else
+
+        #     render :edit
+        # end
+        flash[:notice] = 'Promoção editada com sucesso'
+        redirect_to @promotion
+    end
+
     private
 
     def promotion_params

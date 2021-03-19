@@ -101,12 +101,6 @@ class PromotionsTest < ApplicationSystemTestCase
       visit root_path
       click_on 'Promoções'
       click_on 'Registrar uma promoção'
-      # fill_in 'Nome', with: ''
-      # fill_in 'Descrição', with: ''
-      # fill_in 'Código', with: ''
-      # fill_in 'Desconto', with: ''
-      # fill_in 'Quantidade de cupons', with: ''
-      # fill_in 'Data de término', with: ''
       click_on 'Criar promoção'
   
       assert_text 'não pode ficar em branco', count: 5
@@ -144,6 +138,55 @@ class PromotionsTest < ApplicationSystemTestCase
     assert_text 'NATAL10-0002'
     assert_text 'NATAL10-0100'
     assert_no_text 'NATAL10-0101'
-
     end
+
+    test 'edit promotion' do
+      Promotion.create!(name: 'Natal', description: 'Promoção de Natal',
+                        code: 'NATAL10', discount_rate: 10, coupon_quantity: 100,
+                        expiration_date: '22/12/2033')
+    
+    visit root_path
+    click_on 'Promoções'
+    click_on 'Natal'
+    click_on 'Editar Promoção'
+    
+    fill_in 'Nome', with: 'Cyber Monday'
+    fill_in 'Descrição', with: 'Promoção de Cyber Monday'
+    fill_in 'Código', with: 'CYBER15'
+    fill_in 'Desconto', with: '15'
+    fill_in 'Quantidade de cupons', with: '90'
+    fill_in 'Data de término', with: '22/12/2033'
+    click_on 'Enviar'
+
+    assert_text 'Promoção editada com sucesso'
+    assert_text 'Cyber Monday'
+    assert_text 'Promoção de Cyber Monday'
+    assert_text '15,00%'
+    assert_text 'CYBER15'
+    assert_text '22/12/2033'
+    assert_text '90'
+    end
+
+    # test 'edit promotion, must be valid'  do
+    #   Promotion.create!(name: 'Natal', description: 'Promoção de Natal',
+    #                     code: 'NATAL10', discount_rate: 10, coupon_quantity: 100,
+    #                     expiration_date: '22/12/2033')
+    
+    # visit root_path
+    # click_on 'Promoções'
+    # click_on 'Natal'
+    # click_on 'Editar Promoção'
+    
+    # fill_in 'Nome', with: ''
+    # fill_in 'Descrição', with: ''
+    # fill_in 'Código', with: ''
+    # fill_in 'Desconto', with: ''
+    # fill_in 'Quantidade de cupons', with: ''
+    # fill_in 'Data de término', with: ''
+    # click_on 'Enviar'
+
+    # assert_text 'não pode ficar em branco', count: 5
+    # end
+
+
 end
