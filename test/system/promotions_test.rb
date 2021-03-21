@@ -167,26 +167,26 @@ class PromotionsTest < ApplicationSystemTestCase
     assert_text '90'
     end
 
-    # test 'edit promotion, must be valid'  do
-    #   Promotion.create!(name: 'Natal', description: 'Promoção de Natal',
-    #                     code: 'NATAL10', discount_rate: 10, coupon_quantity: 100,
-    #                     expiration_date: '22/12/2033')
+    test 'to edit a promotion, it must be valid'  do
+      Promotion.create!(name: 'Natal', description: 'Promoção de Natal',
+                        code: 'NATAL10', discount_rate: 10, coupon_quantity: 100,
+                        expiration_date: '22/12/2033')
     
-    # visit root_path
-    # click_on 'Promoções'
-    # click_on 'Natal'
-    # click_on 'Editar Promoção'
+    visit root_path
+    click_on 'Promoções'
+    click_on 'Natal'
+    click_on 'Editar Promoção'
     
-    # fill_in 'Nome', with: ''
-    # fill_in 'Descrição', with: ''
-    # fill_in 'Código', with: ''
-    # fill_in 'Desconto', with: ''
-    # fill_in 'Quantidade de cupons', with: ''
-    # fill_in 'Data de término', with: ''
-    # click_on 'Enviar'
+    fill_in 'Nome', with: ''
+    fill_in 'Descrição', with: ''
+    fill_in 'Código', with: ''
+    fill_in 'Desconto', with: ''
+    fill_in 'Quantidade de cupons', with: ''
+    fill_in 'Data de término', with: ''
+    click_on 'Enviar'
 
-    # assert_text 'não pode ficar em branco', count: 5
-    # end
+    assert_text 'não pode ficar em branco', count: 5
+    end
 
 
 end
