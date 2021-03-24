@@ -68,7 +68,49 @@ class ProductCategoriesTest < ApplicationSystemTestCase
     assert_text 'deve ser único'
   end
 
+  test 'edit Product Category' do
+    ProductCategory.create!(name: 'Livro', code: 'LIVR')
+  
+  visit root_path
+  click_on 'Categorias de Produtos'
+  click_on 'Livro'
+  click_on 'Editar Categoria'
+  
+  fill_in 'Nome', with: 'Fogão'
+  fill_in 'Código', with: 'FOG'
+  click_on 'Enviar'
 
+  assert_text 'Categoria editada com sucesso'
+  assert_text 'Fogão'
+  assert_text 'FOG'
+  end
+
+  test 'to edit a product category, it must be valid'  do
+    ProductCategory.create!(name: 'Livro', code: 'LIVR')
+  
+  visit root_path
+  click_on 'Categorias de Produtos'
+  click_on 'Livro'
+  click_on 'Editar Categoria'
+  
+  fill_in 'Nome', with: ''
+  fill_in 'Código', with: ''
+  click_on 'Enviar'
+
+  assert_text 'não pode ficar em branco', count: 2
+  end
+
+  test 'can delete product category' do
+    product_category = ProductCategory.create!(name: 'Caneta', code: 'CANET')
+    
+  visit product_category_path(product_category)
+  click_on "Excluir Categoria"
+  page.driver.browser.switch_to.alert.accept
+
+  assert_current_path product_categories_path
+  assert_no_text 'Caneta'
+  assert_no_text 'CANET'
+  end
 
 
 end

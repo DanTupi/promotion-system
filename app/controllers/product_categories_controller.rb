@@ -21,6 +21,27 @@ class ProductCategoriesController < ApplicationController
         end
     end
 
+    def edit
+        @product_category = ProductCategory.find(params[:id])
+    end
+
+    def update
+        @product_category = ProductCategory.find(params[:id])
+        if @product_category.update(product_category_params)
+            flash[:notice] = 'Categoria editada com sucesso'
+            redirect_to @product_category
+        else
+            render :edit
+        end
+    end
+
+    def destroy
+        @product_category = ProductCategory.find(params[:id])
+        @product_category.destroy
+        redirect_to product_categories_path
+    end
+
+
     private
 
     def product_category_params
