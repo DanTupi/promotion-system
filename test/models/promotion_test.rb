@@ -36,9 +36,11 @@ class PromotionTest < ActiveSupport::TestCase
   end
 
   test 'generate_coupons! succesfully' do
-    promotion =  Promotion.create!(name: 'Natal', description: 'Promoção de Natal',
-      code: 'NATAL10', discount_rate: 10, coupon_quantity: 100,
-      expiration_date: '22/12/2033')
+    promotion =  Promotion.create!(name: 'Natal',
+                                  description: 'Promoção de Natal',
+                                  code: 'NATAL10', discount_rate: 10,
+                                  coupon_quantity: 100,
+                                  expiration_date: '22/12/2033')
 
     promotion.generate_coupons!
 
@@ -47,12 +49,14 @@ class PromotionTest < ActiveSupport::TestCase
   end
 
   test 'generate_coupons! cannot be called twice' do
-    promotion =  Promotion.create!(name: 'Natal', description: 'Promoção de Natal',
-      code: 'NATAL10', discount_rate: 10, coupon_quantity: 100,
-      expiration_date: '22/12/2033')
-    Coupon.create!(code: '001', promotion: promotion)
-    promotion.generate_coupons!
-
-    #assert promotion.coupons.size == promotion.coupon_quantity
-  end
+    promotion =  Promotion.create!(name: 'Natal',
+                                  description: 'Promoção de Natal',
+                                  code: 'NATAL10', discount_rate: 10,
+                                  coupon_quantity: 100,
+                                  expiration_date: '22/12/2033')
+    Coupon.create!(code: '007', promotion: promotion)
+    assert_no_difference 'Coupon.count' do
+      promotion.generate_coupons!
+      end
+    end
 end

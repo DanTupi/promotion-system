@@ -13,4 +13,9 @@ class Promotion < ApplicationRecord
             end
         end
     end
+
+    #TODO: tests to method coupons?
+    def coupons?
+        coupons.any? 
+    end
 end
