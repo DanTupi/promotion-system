@@ -9,7 +9,9 @@ class PromotionsTest < ApplicationSystemTestCase
                       description: 'Promoção de Cyber Monday',
                       code: 'CYBER15', discount_rate: 15,
                       expiration_date: '22/12/2033')
+    user = User.create!(email: 'usertester@iugu.com.br', password: '123456')
 
+    login_as user, scope: :user
     visit root_path
     click_on 'Promoções'
 
@@ -201,4 +203,11 @@ class PromotionsTest < ApplicationSystemTestCase
     assert_no_text 'Promoção de Natal'
     end
 
+    test 'do not view promotion link without login' do
+      visit root_path
+
+      assert_no_link 'Promoções'
+    end
+    
+  # TODO: several authentication inserts on tests
 end
