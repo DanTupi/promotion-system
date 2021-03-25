@@ -1,5 +1,5 @@
 <h3><%=@promotion.name %></h3>
-#TODO: both, show, new, edit, render: _form
+<% #TODO: both, show, new, edit, render: _form %>
 <dl>
     <dt><%= Promotion.human_attribute_name(:description) %></dt>
     <dd><%= @promotion.description %></dd>
@@ -24,5 +24,13 @@
 <div><%= link_to 'Voltar para Promoções', promotions_path %></div>
 
 <% @promotion.coupons.each do |coupon| %>
-    <p><%= coupon.code %></p>
+  <div id="coupon-<%= coupon.code.parameterize %>">
+    <p>
+      <%= coupon.code %> (<%= Coupon.human_attribute_name("status.#{coupon.status}")%>)
+    </p>
+    <% if coupon.active? %>
+      <%= link_to 'Desabilitar', disable_coupon_path(coupon), method: :post, data:
+        {disable_with: 'Estamos desabilitando...'} %>
+    <% end %>
+    </div>
 <% end %>

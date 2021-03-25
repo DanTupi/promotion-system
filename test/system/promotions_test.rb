@@ -126,18 +126,17 @@ class PromotionsTest < ApplicationSystemTestCase
                                   code: 'NATAL10', discount_rate: 10,
                                   coupon_quantity: 100, 
                                   expiration_date: '22/12/2033')
-    promotion.generate_coupons!
-    assert_equal promotion.coupons.size, promotion.coupon_quantity
-    assert_equal promotion.coupons.first.code, 'NATAL10-0001'
-    # click_on 'Gerar cupons'
+      visit promotion_path(promotion)
+      click_on 'Gerar cupons'
 
-    # assert_text 'Cupons gerados com sucesso'
-    # assert_no_link 'Gerar cupons'
-    # assert_no_text 'NATAL10-0000'
-    # assert_text 'NATAL10-0001'
-    # assert_text 'NATAL10-0002'
-    # assert_text 'NATAL10-0100'
-    # assert_no_text 'NATAL10-0101'
+      assert_text 'Cupons gerados com sucesso'
+      assert_no_link 'Gerar cupons'
+      assert_no_text 'NATAL10-0000'
+      assert_text 'NATAL10-0001 (ativo)'
+      assert_text 'NATAL10-0002 (ativo)'
+      assert_text 'NATAL10-0100 (ativo)'
+      assert_no_text 'NATAL10-0101'
+      assert_link 'Desabilitar', count: 100
     end
 
     test 'edit promotion' do
