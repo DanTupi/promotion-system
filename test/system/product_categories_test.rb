@@ -1,5 +1,5 @@
 require 'application_system_test_case'
-
+#TODO: introduce I18n on test and views.
 class ProductCategoriesTest < ApplicationSystemTestCase
 
   test 'no product categories are available' do

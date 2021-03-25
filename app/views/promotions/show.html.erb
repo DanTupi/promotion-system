@@ -1,14 +1,14 @@
-<%= flash[:notice] %>
 <h3><%=@promotion.name %></h3>
+#TODO: both, show, new, edit, render: _form
 <dl>
-    <dt>Descrição</dt>
+    <dt><%= Promotion.human_attribute_name(:description) %></dt>
     <dd><%= @promotion.description %></dd>
-    <dt>Desconto <small>em porcentagem</small></dt>
-    <dd><%= number_to_percentage @promotion.discount_rate, separator: ',', precision: 2 %></dd>
+    <dt><%= Promotion.human_attribute_name(:discount_rate) %> <small>em porcentagem</small></dt>
+    <dd><%= number_to_percentage @promotion.discount_rate, precision: 2 %></dd>
     <dt>Código</dt>
     <dd><%= @promotion.code %></dd>
     <dt>Data de término</dt>
-    <dd><%= @promotion.expiration_date.strftime '%d/%m/%Y' %></dd>
+    <dd><%= l @promotion.expiration_date %></dd>
     <dt>Quantidade de Cupons</dt>
     <dd><%= @promotion.coupon_quantity %></dd>
 </dl>
@@ -18,7 +18,7 @@
                                             data: { confirm: "Deseja deletar a promoção: #{@promotion.name}?"} %></div>
 
 <% if @promotion.coupons.empty? %>
-    <%= link_to 'Gerar cupons', generate_coupons_promotion_path(@promotion), method: :post%>
+    <%= link_to t('.generate_coupons'), generate_coupons_promotion_path(@promotion), method: :post%>
 <% end %>
 
 <div><%= link_to 'Voltar para Promoções', promotions_path %></div>

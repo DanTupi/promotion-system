@@ -84,7 +84,7 @@ class PromotionsTest < ApplicationSystemTestCase
       fill_in 'Desconto', with: '15'
       fill_in 'Quantidade de cupons', with: '90'
       fill_in 'Data de término', with: '22/12/2033'
-      click_on 'Criar promoção'
+      click_on 'Criar Promoção'
   
       assert_current_path promotion_path(Promotion.last)
       assert_text 'Cyber Monday'
@@ -100,7 +100,7 @@ class PromotionsTest < ApplicationSystemTestCase
       visit root_path
       click_on 'Promoções'
       click_on 'Registrar uma promoção'
-      click_on 'Criar promoção'
+      click_on 'Criar Promoção'
   
       assert_text 'não pode ficar em branco', count: 5
     end
@@ -115,9 +115,9 @@ class PromotionsTest < ApplicationSystemTestCase
       click_on 'Registrar uma promoção'
       fill_in 'Código', with: 'NATAL10'
       fill_in 'Nome', with: 'Natal'
-      click_on 'Criar promoção'
+      click_on 'Criar Promoção'
   
-      assert_text 'deve ser único'
+      assert_text 'já está em uso'
     end
 
     test 'generate coupons! succesfully' do
