@@ -16,5 +16,10 @@ pt-BR:
   promotions:
     show:
       generate_coupons: Gerar cupons
+      edit: Editar Promoção
+      delete: Excluir Promoção
+      back: Voltar para Promoções
     generate_coupons:
       success: Cupons gerados com sucesso
+    update:
+      success: Promoção editada com sucesso

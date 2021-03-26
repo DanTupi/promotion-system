@@ -5,23 +5,23 @@
     <dd><%= @promotion.description %></dd>
     <dt><%= Promotion.human_attribute_name(:discount_rate) %> <small>em porcentagem</small></dt>
     <dd><%= number_to_percentage @promotion.discount_rate, precision: 2 %></dd>
-    <dt>Código</dt>
+    <dt><%= Promotion.human_attribute_name(:code) %></dt>
     <dd><%= @promotion.code %></dd>
-    <dt>Data de término</dt>
+    <dt><%= Promotion.human_attribute_name(:expiration_date) %></dt>
     <dd><%= l @promotion.expiration_date %></dd>
-    <dt>Quantidade de Cupons</dt>
+    <dt><%= Promotion.human_attribute_name(:coupon_quantity) %></dt>
     <dd><%= @promotion.coupon_quantity %></dd>
 </dl>
 
-<div><%= link_to 'Editar Promoção', edit_promotion_path(@promotion) %>
-| <%= link_to 'Excluir Promoção', promotion_path(@promotion), method: :delete,
+<div><%= link_to t('.edit'), edit_promotion_path(@promotion) %>
+| <%= link_to t('.delete'), promotion_path(@promotion), method: :delete,
                                             data: { confirm: "Deseja deletar a promoção: #{@promotion.name}?"} %></div>
 
 <% if @promotion.coupons.empty? %>
     <%= link_to t('.generate_coupons'), generate_coupons_promotion_path(@promotion), method: :post%>
 <% end %>
 
-<div><%= link_to 'Voltar para Promoções', promotions_path %></div>
+<div><%= link_to t('.back'), promotions_path %></div>
 
 <% @promotion.coupons.each do |coupon| %>
   <div id="coupon-<%= coupon.code.parameterize %>">

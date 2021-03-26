@@ -12,4 +12,10 @@ class ActiveSupport::TestCase
   # Add more helper methods to be used by all tests here...
   Minitest.load_plugins
   Minitest::PrideIO.pride!
+  include Warden::Test::Helpers
+
+  def login_user(user = User.create!(email: 'usertester@iugu.com.br',
+    password: '123456'))
+  login_as user, scope: :user
+  end
 end
