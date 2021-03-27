@@ -1,15 +1,11 @@
-<%= flash[:notice] %>
-
+<h3><%= @product_category.name %></h3>
 <dl>
-    <dt>Nome</dt>
-    <dd> <%= @product_category.name %></dd>
-    
-    <dt>Código</dt>
-    <dd><%= @product_category.code %></dd>
+    <dt><%= ProductCategory.human_attribute_name(:code) %></dt>
+    <dd> <%= @product_category.code %></dd>
 </dl>
 
-<div><%= link_to 'Editar Categoria', edit_product_category_path(@product_category) %>
-| <%= link_to 'Excluir Categoria', product_category_path(@product_category), method: :delete,
+<div><%= link_to t('.edit'), edit_product_category_path(@product_category) %>
+| <%= link_to t('.delete'), product_category_path(@product_category), method: :delete,
                                             data: { confirm: "Deseja deletar a Categoria: #{@product_category.name}?"} %></div>
 
-<%= link_to 'Voltar', product_categories_path %>
+<%= link_to t('.back'), product_categories_path %>

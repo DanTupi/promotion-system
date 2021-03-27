@@ -10,7 +10,7 @@
     <dt><%= Promotion.human_attribute_name(:description) %></dt>
     <dd><%= promotion.description %></dd>
     <dt><%= Promotion.human_attribute_name(:discount_rate) %> <small>em porcentagem</small></dt>
-    <dd><%= number_to_percentage promotion.discount_rate, separator: ',', precision: 2 %></dd>
+    <dd><%= number_to_percentage promotion.discount_rate, precision: 2 %></dd>
   </dl>
 <% end %>
 

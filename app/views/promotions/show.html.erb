@@ -1,5 +1,4 @@
 <h3><%=@promotion.name %></h3>
-<% #TODO: both, show, new, edit, render: _form %>
 <dl>
     <dt><%= Promotion.human_attribute_name(:description) %></dt>
     <dd><%= @promotion.description %></dd>
@@ -14,8 +13,9 @@
 </dl>
 
 <div><%= link_to t('.edit'), edit_promotion_path(@promotion) %>
-| <%= link_to t('.delete'), promotion_path(@promotion), method: :delete,
-                                            data: { confirm: "Deseja deletar a promoção: #{@promotion.name}?"} %></div>
+| <%= link_to t('.delete'), promotion_path(@promotion),
+                          method: :delete,
+                          data: { confirm: "Deseja deletar a promoção: #{@promotion.name}?"} %></div>
 
 <% if @promotion.coupons.empty? %>
     <%= link_to t('.generate_coupons'), generate_coupons_promotion_path(@promotion), method: :post%>
@@ -29,7 +29,7 @@
       <%= coupon.code %> (<%= Coupon.human_attribute_name("status.#{coupon.status}")%>)
     </p>
     <% if coupon.active? %>
-      <%= link_to 'Desabilitar', disable_coupon_path(coupon), method: :post, data:
+      <%= link_to t('.disable_coupon'), disable_coupon_path(coupon), method: :post, data:
         {disable_with: 'Estamos desabilitando...'} %>
     <% end %>
     </div>

@@ -1,6 +1,5 @@
 require 'application_system_test_case'
 #TODO: introduce I18n on test and views.
-#TODO: add authentication on tests
 class ProductCategoriesTest < ApplicationSystemTestCase
 
   test 'no product categories are available' do
@@ -86,7 +85,7 @@ end
     
     fill_in 'Nome', with: 'Fogão'
     fill_in 'Código', with: 'FOG'
-    click_on 'Enviar'
+    click_on 'Atualizar Categoria de Produto'
 
     assert_text 'Categoria editada com sucesso'
     assert_text 'Fogão'
@@ -104,7 +103,7 @@ end
     
     fill_in 'Nome', with: ''
     fill_in 'Código', with: ''
-    click_on 'Enviar'
+    click_on 'Atualizar Categoria de Produto'
 
     assert_text 'não pode ficar em branco', count: 2
   end

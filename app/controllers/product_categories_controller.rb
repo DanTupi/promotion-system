@@ -28,8 +28,7 @@ class ProductCategoriesController < ApplicationController
 
   def update
     if @product_category.update(product_category_params)
-      flash[:notice] = 'Categoria editada com sucesso'
-      redirect_to @product_category
+      redirect_to @product_category, notice: t('.success')
     else
       render :edit
     end

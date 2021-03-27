@@ -1,0 +1,18 @@
+---
+pt-BR:
+  activerecord:
+    models:
+      product_category:
+        one: Categoria de Produto
+        other: Categorias de Produto
+    attributes:
+      product_category:
+        name: Nome
+        code: Código
+  product_categories:
+    show:
+      edit: Editar Categoria
+      delete: Excluir Categoria
+      back: Voltar
+    update:
+      success: Categoria editada com sucesso
