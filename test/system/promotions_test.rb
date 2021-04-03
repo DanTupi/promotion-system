@@ -79,161 +79,193 @@ class PromotionsTest < ApplicationSystemTestCase
   end
 
   test 'create promotion' do
-      login_user  
-      visit root_path
-      click_on 'Promoções'
-      click_on 'Registrar uma promoção'
-      fill_in 'Nome', with: 'Cyber Monday'
-      fill_in 'Descrição', with: 'Promoção de Cyber Monday'
-      fill_in 'Código', with: 'CYBER15'
-      fill_in 'Desconto', with: '15'
-      fill_in 'Quantidade de cupons', with: '90'
-      fill_in 'Data de término', with: '22/12/2033'
-      click_on 'Criar Promoção'
-  
-      assert_current_path promotion_path(Promotion.last)
-      assert_text 'Cyber Monday'
-      assert_text 'Promoção de Cyber Monday'
-      assert_text '15,00%'
-      assert_text 'CYBER15'
-      assert_text '22/12/2033'
-      assert_text '90'
-      assert_link 'Voltar'
-    end
+    login_user  
+    visit root_path
+    click_on 'Promoções'
+    click_on 'Registrar uma promoção'
+    fill_in 'Nome', with: 'Cyber Monday'
+    fill_in 'Descrição', with: 'Promoção de Cyber Monday'
+    fill_in 'Código', with: 'CYBER15'
+    fill_in 'Desconto', with: '15'
+    fill_in 'Quantidade de cupons', with: '90'
+    fill_in 'Data de término', with: '22/12/2033'
+    click_on 'Criar Promoção'
 
-    test 'create and attributes cannot be blank' do
-      login_user
-      visit root_path
-      click_on 'Promoções'
-      click_on 'Registrar uma promoção'
-      click_on 'Criar Promoção'
-  
-      assert_text 'não pode ficar em branco', count: 5
-    end
-  
-    test 'create and code/name must be unique' do
-      Promotion.create!(name: 'Natal', description: 'Promoção de Natal',
-                        code: 'NATAL10', discount_rate: 10, coupon_quantity: 100,
-                        expiration_date: '22/12/2033')
+    assert_current_path promotion_path(Promotion.last)
+    assert_text 'Cyber Monday'
+    assert_text 'Promoção de Cyber Monday'
+    assert_text '15,00%'
+    assert_text 'CYBER15'
+    assert_text '22/12/2033'
+    assert_text '90'
+    assert_link 'Voltar'
+  end
 
-      login_user
-      visit root_path
-      click_on 'Promoções'
-      click_on 'Registrar uma promoção'
-      fill_in 'Código', with: 'NATAL10'
-      fill_in 'Nome', with: 'Natal'
-      click_on 'Criar Promoção'
-  
-      assert_text 'já está em uso'
-    end
+  test 'create and attributes cannot be blank' do
+    login_user
+    visit root_path
+    click_on 'Promoções'
+    click_on 'Registrar uma promoção'
+    click_on 'Criar Promoção'
 
-    test 'generate coupons! succesfully' do
-      promotion = Promotion.create!(name: 'Natal',
+    assert_text 'não pode ficar em branco', count: 5
+  end
+  
+  test 'create and code/name must be unique' do
+    Promotion.create!(name: 'Natal', description: 'Promoção de Natal',
+                      code: 'NATAL10', discount_rate: 10, coupon_quantity: 100,
+                      expiration_date: '22/12/2033')
+
+    login_user
+    visit root_path
+    click_on 'Promoções'
+    click_on 'Registrar uma promoção'
+    fill_in 'Código', with: 'NATAL10'
+    fill_in 'Nome', with: 'Natal'
+    click_on 'Criar Promoção'
+
+    assert_text 'já está em uso'
+  end
+
+  test 'generate coupons! succesfully' do
+    promotion = Promotion.create!(name: 'Natal',
+                                description: 'Promoção de Natal',
+                                code: 'NATAL10', discount_rate: 10,
+                                coupon_quantity: 100, 
+                                expiration_date: '22/12/2033')
+    
+    login_user
+    visit promotion_path(promotion)
+    click_on 'Gerar cupons'
+
+    assert_text 'Cupons gerados com sucesso'
+    assert_no_link 'Gerar cupons'
+    assert_no_text 'NATAL10-0000'
+    assert_text 'NATAL10-0001 (ativo)'
+    assert_text 'NATAL10-0002 (ativo)'
+    assert_text 'NATAL10-0100 (ativo)'
+    assert_no_text 'NATAL10-0101'
+    assert_link 'Desabilitar', count: 100
+  end
+
+  #TODO: add some features about the query (number  found)
+  test 'search promotions by term and find results' do
+    christmas =  Promotion.create!(name: 'Natal',
                                   description: 'Promoção de Natal',
                                   code: 'NATAL10', discount_rate: 10,
-                                  coupon_quantity: 100, 
+                                  coupon_quantity: 100,
                                   expiration_date: '22/12/2033')
-      
-      login_user
-      visit promotion_path(promotion)
-      click_on 'Gerar cupons'
+    cyber_monday = Promotion.create!(name: 'Cyber Monday', coupon_quantity: 90,
+                                    description: 'Promoção de Cyber Monday',
+                                    code: 'CYBER15', discount_rate: 15,
+                                    expiration_date: '22/12/2033')
+    christmas_eve =  Promotion.create!(name: 'Natalina',
+                                      description: 'Noite de Natal',
+                                      code: 'NATALINO10', discount_rate: 10,
+                                      coupon_quantity: 100,
+                                      expiration_date: '22/12/2033')
+    login_user
+    visit root_path
+    click_on 'Promoções'
+    fill_in 'Busca', with: 'natal'
+    click_on 'Buscar'
 
-      assert_text 'Cupons gerados com sucesso'
-      assert_no_link 'Gerar cupons'
-      assert_no_text 'NATAL10-0000'
-      assert_text 'NATAL10-0001 (ativo)'
-      assert_text 'NATAL10-0002 (ativo)'
-      assert_text 'NATAL10-0100 (ativo)'
-      assert_no_text 'NATAL10-0101'
-      assert_link 'Desabilitar', count: 100
-    end
+    assert_text christmas.name
+    assert_text christmas_eve.name
+    refute_text cyber_monday.name
+  end
 
-    test 'edit promotion' do
-      Promotion.create!(name: 'Natal', description: 'Promoção de Natal',
-                        code: 'NATAL10', discount_rate: 10, coupon_quantity: 100,
-                        expiration_date: '22/12/2033')
-      
-      login_user
-      visit root_path
-      click_on 'Promoções'
-      click_on 'Natal'
-      click_on 'Editar Promoção'
-      
-      fill_in 'Nome', with: 'Cyber Monday'
-      fill_in 'Descrição', with: 'Promoção de Cyber Monday'
-      fill_in 'Código', with: 'CYBER15'
-      fill_in 'Desconto', with: '15'
-      fill_in 'Quantidade de cupons', with: '90'
-      fill_in 'Data de término', with: '22/12/2033'
-      click_on 'Atualizar Promoção'
+  # TODO: found nothing
+  # TODO: visit page without loging in
+  # visit search_promotions(q: 'natal') expecting  root
 
-      assert_text 'Promoção editada com sucesso'
-      assert_text 'Cyber Monday'
-      assert_text 'Promoção de Cyber Monday'
-      assert_text '15,00%'
-      assert_text 'CYBER15'
-      assert_text '22/12/2033'
-      assert_text '90'
-    end
+  test 'edit promotion' do
+    Promotion.create!(name: 'Natal', description: 'Promoção de Natal',
+                      code: 'NATAL10', discount_rate: 10, coupon_quantity: 100,
+                      expiration_date: '22/12/2033')
+    
+    login_user
+    visit root_path
+    click_on 'Promoções'
+    click_on 'Natal'
+    click_on 'Editar Promoção'
+    
+    fill_in 'Nome', with: 'Cyber Monday'
+    fill_in 'Descrição', with: 'Promoção de Cyber Monday'
+    fill_in 'Código', with: 'CYBER15'
+    fill_in 'Desconto', with: '15'
+    fill_in 'Quantidade de cupons', with: '90'
+    fill_in 'Data de término', with: '22/12/2033'
+    click_on 'Atualizar Promoção'
 
-    test 'to edit a promotion, it must be valid'  do
-      Promotion.create!(name: 'Natal', description: 'Promoção de Natal',
-                        code: 'NATAL10', discount_rate: 10, coupon_quantity: 100,
-                        expiration_date: '22/12/2033')
+    assert_text 'Promoção editada com sucesso'
+    assert_text 'Cyber Monday'
+    assert_text 'Promoção de Cyber Monday'
+    assert_text '15,00%'
+    assert_text 'CYBER15'
+    assert_text '22/12/2033'
+    assert_text '90'
+  end
 
-      login_user
-      visit root_path
-      click_on 'Promoções'
-      click_on 'Natal'
-      click_on 'Editar Promoção'
-      
-      fill_in 'Nome', with: ''
-      fill_in 'Descrição', with: ''
-      fill_in 'Código', with: ''
-      fill_in 'Desconto', with: ''
-      fill_in 'Quantidade de cupons', with: ''
-      fill_in 'Data de término', with: ''
-      click_on 'Atualizar Promoção'
+  test 'to edit a promotion, it must be valid'  do
+    Promotion.create!(name: 'Natal', description: 'Promoção de Natal',
+                      code: 'NATAL10', discount_rate: 10, coupon_quantity: 100,
+                      expiration_date: '22/12/2033')
 
-      assert_text 'não pode ficar em branco', count: 5
-    end
+    login_user
+    visit root_path
+    click_on 'Promoções'
+    click_on 'Natal'
+    click_on 'Editar Promoção'
+    
+    fill_in 'Nome', with: ''
+    fill_in 'Descrição', with: ''
+    fill_in 'Código', with: ''
+    fill_in 'Desconto', with: ''
+    fill_in 'Quantidade de cupons', with: ''
+    fill_in 'Data de término', with: ''
+    click_on 'Atualizar Promoção'
 
-    test 'can delete promotion' do
-      promotion = Promotion.create!(name: 'Natal', description: 'Promoção de Natal',
-        code: 'NATAL10', discount_rate: 10, coupon_quantity: 100,
-        expiration_date: '22/12/2033')
-      
-      login_user
-      visit promotion_path(promotion)
-      click_on "Excluir Promoção"
-      page.driver.browser.switch_to.alert.accept
+    assert_text 'não pode ficar em branco', count: 5
+  end
 
-      assert_current_path promotions_path
-      assert_no_text 'Natal'
-      assert_no_text 'Promoção de Natal'
-    end
+  test 'can delete promotion' do
+    promotion = Promotion.create!(name: 'Natal', description: 'Promoção de Natal',
+                                  code: 'NATAL10', discount_rate: 10,
+                                  coupon_quantity: 100,
+                                  expiration_date: '22/12/2033')
+    
+    login_user
+    visit promotion_path(promotion)
+    click_on "Excluir Promoção"
+    page.driver.browser.switch_to.alert.accept
 
-    test 'do not view promotion link without login' do
-      visit root_path
+    assert_current_path promotions_path
+    assert_no_text 'Natal'
+    assert_no_text 'Promoção de Natal'
+  end
 
-      assert_no_link 'Promoções'
-    end
+  test 'do not view promotion link without login' do
+    visit root_path
 
-    test 'do not view promotions route without login' do
-      visit promotions_path
+    assert_no_link 'Promoções'
+  end
 
-      assert_current_path new_user_session_path
-    end
+  test 'do not view promotions route without login' do
+    visit promotions_path
 
-    test 'do view promotion details without login' do
-      promotion = Promotion.create!(name: 'Natal', description: 'Promoção de Natal',
-        code: 'NATAL10', discount_rate: 10, coupon_quantity: 100,
-        expiration_date: '22/12/2033')
+    assert_current_path new_user_session_path
+  end
 
-      visit promotion_path(promotion)
+  test 'do view promotion details without login' do
+    promotion = Promotion.create!(name: 'Natal', description: 'Promoção de Natal',
+                                  code: 'NATAL10', discount_rate: 10, 
+                                  coupon_quantity: 100,
+                                  expiration_date: '22/12/2033')
 
-      assert_current_path new_user_session_path
-    end
+    visit promotion_path(promotion)
 
-  # TODO: several authentication inserts on tests
+    assert_current_path new_user_session_path
+  end
+
 end

@@ -35,7 +35,7 @@ class PromotionTest < ActiveSupport::TestCase
     assert_includes promotion.errors[:name], 'já está em uso'
   end
 
-  test 'generate_coupons! succesfully' do
+  test '#generate_coupons! succesfully' do
     promotion =  Promotion.create!(name: 'Natal',
                                   description: 'Promoção de Natal',
                                   code: 'NATAL10', discount_rate: 10,
@@ -48,7 +48,7 @@ class PromotionTest < ActiveSupport::TestCase
     assert_equal promotion.coupons.first.code, 'NATAL10-0001'
   end
 
-  test 'generate_coupons! cannot be called twice' do
+  test '#generate_coupons! cannot be called twice' do
     promotion =  Promotion.create!(name: 'Natal',
                                   description: 'Promoção de Natal',
                                   code: 'NATAL10', discount_rate: 10,
@@ -59,4 +59,54 @@ class PromotionTest < ActiveSupport::TestCase
       promotion.generate_coupons!
       end
     end
+
+  test '.search by exact' do
+    christmas =  Promotion.create!(name: 'Natal',
+                                  description: 'Promoção de Natal',
+                                  code: 'NATAL10', discount_rate: 10,
+                                  coupon_quantity: 100,
+                                  expiration_date: '22/12/2033')
+    cyber_monday = Promotion.create!(name: 'Cyber Monday', coupon_quantity: 90,
+                                    description: 'Promoção de Cyber Monday',
+                                    code: 'CYBER15', discount_rate: 15,
+                                    expiration_date: '22/12/2033')
+    result = Promotion.search('Natal')
+    assert_includes result,  christmas
+    refute_includes result, cyber_monday
+  end
+
+  test '.search by partial' do
+    christmas =  Promotion.create!(name: 'Natal',
+                                  description: 'Promoção de Natal',
+                                  code: 'NATAL10', discount_rate: 10,
+                                  coupon_quantity: 100,
+                                  expiration_date: '22/12/2033')
+    cyber_monday = Promotion.create!(name: 'Cyber Monday', coupon_quantity: 90,
+                                    description: 'Promoção de Cyber Monday',
+                                    code: 'CYBER15', discount_rate: 15,
+                                    expiration_date: '22/12/2033')
+    christmas_eve =  Promotion.create!(name: 'Natalina',
+                                      description: 'Noite de Natal',
+                                      code: 'NATALINO10', discount_rate: 10,
+                                      coupon_quantity: 100,
+                                      expiration_date: '22/12/2033')
+    result = Promotion.search('natal')
+    assert_includes result, christmas
+    assert_includes result, christmas_eve
+    refute_includes result, cyber_monday
+  end
+
+  test '.search finds nothing' do
+    christmas =  Promotion.create!(name: 'Natal',
+                                  description: 'Promoção de Natal',
+                                  code: 'NATAL10', discount_rate: 10,
+                                  coupon_quantity: 100,
+                                  expiration_date: '22/12/2033')
+    cyber_monday = Promotion.create!(name: 'Cyber Monday', coupon_quantity: 90,
+                                    description: 'Promoção de Cyber Monday',
+                                    code: 'CYBER15', discount_rate: 15,
+                                    expiration_date: '22/12/2033')
+    result = Promotion.search('halloween')
+    assert_empty result
+  end
 end
