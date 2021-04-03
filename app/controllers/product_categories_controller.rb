@@ -1,5 +1,4 @@
 class ProductCategoriesController < ApplicationController
-#TODO:  I18n
   before_action :authenticate_user!, only: %i[index show new create update destroy]
   before_action :set_product_category, only: %i[show edit update destroy]
   

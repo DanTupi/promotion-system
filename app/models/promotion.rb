@@ -1,5 +1,5 @@
 class Promotion < ApplicationRecord
-    has_many  :coupons
+    has_many  :coupons, dependent: :restrict_with_error
 
     validates :name, :code, :discount_rate, :coupon_quantity, :expiration_date,
                 presence: true
@@ -18,4 +18,5 @@ class Promotion < ApplicationRecord
     def coupons?
         coupons.any? 
     end
+    #TODO: check for kaminari
 end

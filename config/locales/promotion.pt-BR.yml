@@ -20,7 +20,11 @@ pt-BR:
       delete: Excluir Promoção
       back: Voltar para Promoções
       disable_coupon: Desabilitar
+      destroy_confirm: Tem certeza que desenha apagar essa Promoção?
     generate_coupons:
       success: Cupons gerados com sucesso
     update:
       success: Promoção editada com sucesso
+    destroy:
+      success: Promoção apagada com sucesso
+      failed: Promoção não pode ser apagada
