@@ -175,9 +175,55 @@ class PromotionsTest < ApplicationSystemTestCase
     refute_text cyber_monday.name
   end
 
-  # TODO: found nothing
-  # TODO: visit page without loging in
-  # visit search_promotions(q: 'natal') expecting  root
+  test 'search promotions by term and finds one result' do
+    christmas =  Promotion.create!(name: 'Natal',
+                                  description: 'Promoção de Natal',
+                                  code: 'NATAL10', discount_rate: 10,
+                                  coupon_quantity: 100,
+                                  expiration_date: '22/12/2033')
+    cyber_monday = Promotion.create!(name: 'Cyber Monday', coupon_quantity: 90,
+                                    description: 'Promoção de Cyber Monday',
+                                    code: 'CYBER15', discount_rate: 15,
+                                    expiration_date: '22/12/2033')
+
+    login_user
+    visit root_path
+    click_on 'Promoções'
+    fill_in 'Busca', with: 'natal'
+    click_on 'Buscar'
+
+    assert_text christmas.name
+    refute_text cyber_monday.name
+    assert_text '1 promoção encontrada pra o termo: natal'
+  end
+
+  test 'search promotions by term and do not find results' do
+    christmas =  Promotion.create!(name: 'Natal',
+                                  description: 'Promoção de Natal',
+                                  code: 'NATAL10', discount_rate: 10,
+                                  coupon_quantity: 100,
+                                  expiration_date: '22/12/2033')
+    cyber_monday = Promotion.create!(name: 'Cyber Monday', coupon_quantity: 90,
+                                  description: 'Promoção de Cyber Monday',
+                                  code: 'CYBER15', discount_rate: 15,
+                                  expiration_date: '22/12/2033')
+    christmas_eve =  Promotion.create!(name: 'Natalina',
+                                  description: 'Noite de Natal',
+                                  code: 'NATALINO10', discount_rate: 10,
+                                  coupon_quantity: 100,
+                                  expiration_date: '22/12/2033')
+
+    login_user
+    visit root_path
+    click_on 'Promoções'
+    fill_in 'Busca', with: 'friday'
+    click_on 'Buscar'
+
+    refute_text christmas.name
+    refute_text christmas_eve.name
+    refute_text cyber_monday.name
+    assert_text 'Nenhuma promoção encontrada para o termo: friday'
+  end
 
   test 'edit promotion' do
     Promotion.create!(name: 'Natal', description: 'Promoção de Natal',
@@ -264,6 +310,12 @@ class PromotionsTest < ApplicationSystemTestCase
                                   expiration_date: '22/12/2033')
 
     visit promotion_path(promotion)
+
+    assert_current_path new_user_session_path
+  end
+
+  test 'can not search promotions without login' do
+    visit search_promotions_path(query: 'halloween')
 
     assert_current_path new_user_session_path
   end

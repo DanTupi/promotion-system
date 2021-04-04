@@ -1,6 +1,6 @@
 class PromotionsController < ApplicationController
   before_action :authenticate_user!, only: %i[index show new create
-                                              generate_coupons]  
+                                              generate_coupons search]  
   before_action :set_promotion, only: %i[show generate_coupons
                                         edit update destroy]
 
@@ -46,8 +46,8 @@ class PromotionsController < ApplicationController
   end
   
   def search
-    @promotions = Promotion.search(params[:query])
-    render :index
+    @query = params[:query]
+    @promotions = Promotion.search(@query)
   end
 
   private
