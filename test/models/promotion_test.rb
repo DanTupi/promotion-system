@@ -16,9 +16,10 @@ class PromotionTest < ActiveSupport::TestCase
   end
 
   test 'code must be uniq' do
+    user = User.create!(email: 'testolino@iugu.com.br', password: '123456')
     Promotion.create!(name: 'Natal', description: 'Promoção de Natal',
                       code: 'NATAL10', discount_rate: 10, coupon_quantity: 100,
-                      expiration_date: '22/12/2033')
+                      expiration_date: '22/12/2033', user: user)
     promotion = Promotion.new(code: 'NATAL10')
 
     refute promotion.valid?
@@ -26,9 +27,10 @@ class PromotionTest < ActiveSupport::TestCase
   end
   
   test 'name must be uniq' do
+    user = User.create!(email: 'testolino@iugu.com.br', password: '123456')
     Promotion.create!(name: 'Natal', description: 'Promoção de Natal',
                       code: 'NATAL10', discount_rate: 10, coupon_quantity: 100,
-                      expiration_date: '22/12/2033')
+                      expiration_date: '22/12/2033', user: user)
     promotion = Promotion.new(name: 'Natal')
 
     refute promotion.valid?
@@ -36,11 +38,12 @@ class PromotionTest < ActiveSupport::TestCase
   end
 
   test '#generate_coupons! succesfully' do
+    user = User.create!(email: 'testolino@iugu.com.br', password: '123456')
     promotion =  Promotion.create!(name: 'Natal',
                                   description: 'Promoção de Natal',
                                   code: 'NATAL10', discount_rate: 10,
                                   coupon_quantity: 100,
-                                  expiration_date: '22/12/2033')
+                                  expiration_date: '22/12/2033', user: user)
 
     promotion.generate_coupons!
 
@@ -49,11 +52,12 @@ class PromotionTest < ActiveSupport::TestCase
   end
 
   test '#generate_coupons! cannot be called twice' do
+    user = User.create!(email: 'testolino@iugu.com.br', password: '123456')
     promotion =  Promotion.create!(name: 'Natal',
                                   description: 'Promoção de Natal',
                                   code: 'NATAL10', discount_rate: 10,
                                   coupon_quantity: 100,
-                                  expiration_date: '22/12/2033')
+                                  expiration_date: '22/12/2033', user: user)
     Coupon.create!(code: '007', promotion: promotion)
     assert_no_difference 'Coupon.count' do
       promotion.generate_coupons!
@@ -61,35 +65,37 @@ class PromotionTest < ActiveSupport::TestCase
     end
 
   test '.search by exact' do
+    user = User.create!(email: 'testolino@iugu.com.br', password: '123456')
     christmas =  Promotion.create!(name: 'Natal',
                                   description: 'Promoção de Natal',
                                   code: 'NATAL10', discount_rate: 10,
                                   coupon_quantity: 100,
-                                  expiration_date: '22/12/2033')
+                                  expiration_date: '22/12/2033', user: user)
     cyber_monday = Promotion.create!(name: 'Cyber Monday', coupon_quantity: 90,
                                     description: 'Promoção de Cyber Monday',
                                     code: 'CYBER15', discount_rate: 15,
-                                    expiration_date: '22/12/2033')
+                                    expiration_date: '22/12/2033', user: user)
     result = Promotion.search('Natal')
     assert_includes result,  christmas
     refute_includes result, cyber_monday
   end
 
   test '.search by partial' do
+    user = User.create!(email: 'testolino@iugu.com.br', password: '123456')
     christmas =  Promotion.create!(name: 'Natal',
                                   description: 'Promoção de Natal',
                                   code: 'NATAL10', discount_rate: 10,
                                   coupon_quantity: 100,
-                                  expiration_date: '22/12/2033')
+                                  expiration_date: '22/12/2033', user: user)
     cyber_monday = Promotion.create!(name: 'Cyber Monday', coupon_quantity: 90,
                                     description: 'Promoção de Cyber Monday',
                                     code: 'CYBER15', discount_rate: 15,
-                                    expiration_date: '22/12/2033')
+                                    expiration_date: '22/12/2033', user: user)
     christmas_eve =  Promotion.create!(name: 'Natalina',
                                       description: 'Noite de Natal',
                                       code: 'NATALINO10', discount_rate: 10,
                                       coupon_quantity: 100,
-                                      expiration_date: '22/12/2033')
+                                      expiration_date: '22/12/2033', user: user)
     result = Promotion.search('natal')
     assert_includes result, christmas
     assert_includes result, christmas_eve
@@ -97,15 +103,16 @@ class PromotionTest < ActiveSupport::TestCase
   end
 
   test '.search finds nothing' do
+    user = User.create!(email: 'testolino@iugu.com.br', password: '123456')
     christmas =  Promotion.create!(name: 'Natal',
                                   description: 'Promoção de Natal',
                                   code: 'NATAL10', discount_rate: 10,
                                   coupon_quantity: 100,
-                                  expiration_date: '22/12/2033')
+                                  expiration_date: '22/12/2033', user: user)
     cyber_monday = Promotion.create!(name: 'Cyber Monday', coupon_quantity: 90,
                                     description: 'Promoção de Cyber Monday',
                                     code: 'CYBER15', discount_rate: 15,
-                                    expiration_date: '22/12/2033')
+                                    expiration_date: '22/12/2033', user: user)
     result = Promotion.search('halloween')
     assert_empty result
   end

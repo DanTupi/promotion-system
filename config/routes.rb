@@ -5,7 +5,10 @@ Rails.application.routes.draw do
   #TODO:get 'search', to: 'home#search'
   resources :promotions, only: %i[index show new create 
                                 edit update destroy] do
-    post 'generate_coupons', on: :member
+    member do
+      post 'approve'  
+      post 'generate_coupons'
+    end
     get 'search', on: :collection
   end
   
