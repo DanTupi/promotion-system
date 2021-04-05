@@ -18,4 +18,10 @@ Rails.application.routes.draw do
 
   resources :product_categories, only: %i[index show new create
                                           edit update destroy]
+
+  namespace :api do
+    namespace :v1 do
+      resources :coupons, only: %i[show], param: :code
+    end
+  end
 end
