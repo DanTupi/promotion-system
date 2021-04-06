@@ -23,6 +23,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :coupons, only: %i[show], param: :code
       resources :promotions, only: %i[index show create]
+      resources :product_categories, only: %i[show index]
     end
   end
 end
