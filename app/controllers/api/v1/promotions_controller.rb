@@ -1,5 +1,5 @@
 class Api::V1::PromotionsController < Api::V1::ApiController
-  before_action :set_promotion, only: %i[show update destroy]
+  before_action :set_promotion, only: %i[show  destroy]
 
   def index
     render json: Promotion.all
@@ -10,7 +10,7 @@ class Api::V1::PromotionsController < Api::V1::ApiController
   end
 
   def create
-    @promotion = Promotion.new(promotion_params)
+    @promotion = Promotion.create(promotion_params)
 
     if @promotion.save
       render json: @promotion, status: 201

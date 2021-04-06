@@ -38,6 +38,17 @@ class Promotion < ApplicationRecord
     promotion_approval.present?    
   end
 
+  # scope :search, ->(query){
+  #   where(
+  #     SEARCHABLE_FIELDS
+  #       .map { |field| "#{field} LIKE :query"}
+  #       .join(' OR '),
+  #     query: "%#{query}%"
+  #   )
+  # }
+
+  scope :available, -> { where('expiration_date >= ?', Time.zone.now)}
+
   def can_approve?(current_user)
     user != current_user
   end

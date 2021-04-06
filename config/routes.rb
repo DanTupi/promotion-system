@@ -19,7 +19,7 @@ Rails.application.routes.draw do
   resources :product_categories, only: %i[index show new create
                                           edit update destroy]
 
-  namespace :api do
+  namespace :api, constraints: ->(req) { req.format == :json} do
     namespace :v1 do
       resources :coupons, only: %i[show], param: :code
       resources :promotions, only: %i[index show create]
