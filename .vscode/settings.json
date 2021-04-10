@@ -1,0 +1,8 @@
+{
+  "editor.fontLigatures": true
+  "keyboard.dispatch": "keyCode"
+  "editor.renderWhitespace": "all"
+  "editor.tabSize": 2
+  "editor.fontSize": 16
+  "editor.fontFamily": "Cascadia Code Regular",
+}
