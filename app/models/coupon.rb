@@ -7,5 +7,4 @@ class Coupon < ApplicationRecord
   def as_json(options = {})
     super({ methods: :discount_rate }.merge(options))
   end
-
 end

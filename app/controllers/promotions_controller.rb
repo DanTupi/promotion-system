@@ -1,16 +1,15 @@
 class PromotionsController < ApplicationController
   before_action :authenticate_user!, only: %i[index show new create update destroy
-                                              generate_coupons search]  
+                                              generate_coupons search]
   before_action :set_promotion, only: %i[show generate_coupons
-                                        edit update destroy approve]
+                                         edit update destroy approve]
   before_action :can_be_approved, only: [:approve]
 
   def index
-    @promotions = Promotion.all 
+    @promotions = Promotion.all
   end
 
-  def show
-  end
+  def show; end
 
   def new
     @promotion = Promotion.new
@@ -25,14 +24,13 @@ class PromotionsController < ApplicationController
     end
   end
 
-  def edit
-  end
+  def edit; end
 
   def update
     if @promotion.update(promotion_params)
-      redirect_to @promotion, notice: t('.success') 
+      redirect_to @promotion, notice: t('.success')
     else
-      render :edit 
+      render :edit
     end
   end
 
@@ -42,10 +40,10 @@ class PromotionsController < ApplicationController
   end
 
   def generate_coupons
-    @promotion.generate_coupons! 
-    redirect_to @promotion, notice: t('.success') 
+    @promotion.generate_coupons!
+    redirect_to @promotion, notice: t('.success')
   end
-  
+
   def search
     @query = params[:query]
     @promotions = Promotion.search(@query)
@@ -59,7 +57,7 @@ class PromotionsController < ApplicationController
   private
 
   def set_promotion
-    @promotion = Promotion.find(params[:id])      
+    @promotion = Promotion.find(params[:id])
   end
 
   def promotion_params
@@ -70,7 +68,8 @@ class PromotionsController < ApplicationController
   end
 
   def can_be_approved
-    redirect_to @promotion,
-    alert: 'Ação não permitida' unless @promotion.can_approve?(current_user)
+    return if @promotion.can_approve?(current_user)
+
+    redirect_to @promotion, alert: 'Ação não permitida'
   end
 end

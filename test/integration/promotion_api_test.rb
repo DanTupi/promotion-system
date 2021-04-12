@@ -44,21 +44,21 @@ class PromotionApiTest < ActionDispatch::IntegrationTest
 
   test 'show all promotions' do
     user = User.create!(email: 'apeino@iugu.com.br', password: '123456')
-    promotion_01 = Promotion.create!(name: 'Natal', description: 'Promoção de Natal',
-                                  code: 'NATAL10', discount_rate: 14,
-                                  coupon_quantity: 10,
-                                  expiration_date: '12/12/2023', user: user)
-    promotion_02 = Promotion.create!(name: 'Casa', description: 'Promoção de Casa',
-                                    code: 'CASA10', discount_rate: 10,
-                                    coupon_quantity: 20,
-                                    expiration_date: '1/12/2022', user: user)
+    first_promotion = Promotion.create!(name: 'Natal', description: 'Promoção de Natal',
+                                        code: 'NATAL10', discount_rate: 14,
+                                        coupon_quantity: 10,
+                                        expiration_date: '12/12/2023', user: user)
+    second_promotion = Promotion.create!(name: 'Casa', description: 'Promoção de Casa',
+                                         code: 'CASA10', discount_rate: 10,
+                                         coupon_quantity: 20,
+                                         expiration_date: '1/12/2022', user: user)
 
     get api_v1_promotions_path, as: :json
-    
+
     assert_response :success
     body = JSON.parse(response.body, symbolize_names: true)
-    assert_equal promotion_01.name, body.first[:name]
-    assert_equal promotion_02.name, body.last[:name]
+    assert_equal first_promotion.name, body.first[:name]
+    assert_equal second_promotion.name, body.last[:name]
   end
 
   test 'show coupon disabled' do
@@ -71,7 +71,7 @@ class PromotionApiTest < ActionDispatch::IntegrationTest
                             status: :disabled)
 
     get "/api/v1/coupons/#{coupon.code}", as: :json
-    
+
     assert_response :not_found
   end
 
@@ -88,5 +88,4 @@ class PromotionApiTest < ActionDispatch::IntegrationTest
   #   assert_response :created
   #   assert_equal promotion.name, body[:name]
   # end
-
 end

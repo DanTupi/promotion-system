@@ -1,7 +1,7 @@
 class ProductCategoriesController < ApplicationController
   before_action :authenticate_user!, only: %i[index show new create update destroy]
   before_action :set_product_category, only: %i[show edit update destroy]
-  
+
   def index
     @product_categories = ProductCategory.all
   end
@@ -10,8 +10,7 @@ class ProductCategoriesController < ApplicationController
     @product_category = ProductCategory.new
   end
 
-  def show
-  end
+  def show; end
 
   def create
     @product_category = ProductCategory.new(product_category_params)
@@ -22,8 +21,7 @@ class ProductCategoriesController < ApplicationController
     end
   end
 
-  def edit
-  end
+  def edit; end
 
   def update
     if @product_category.update(product_category_params)
@@ -38,7 +36,6 @@ class ProductCategoriesController < ApplicationController
     redirect_to product_categories_path
   end
 
-
   private
 
   def set_product_category
@@ -46,6 +43,6 @@ class ProductCategoriesController < ApplicationController
   end
 
   def product_category_params
-    params.require(:product_category).permit(:name, :code) 
+    params.require(:product_category).permit(:name, :code)
   end
 end

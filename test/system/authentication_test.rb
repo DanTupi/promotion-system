@@ -5,7 +5,7 @@ class AuthenticationTest < ApplicationSystemTestCase
     visit root_path
     click_on 'Cadastrar'
     fill_in 'E-mail', with: 'one.email@iugu.com.br'
-    #fill_in 'Confirmar E-mail', with: 'one.email@iugu.com.br'
+    # fill_in 'Confirmar E-mail', with: 'one.email@iugu.com.br'
     fill_in 'Senha', with: '123456'
     fill_in 'Confirmação de senha', with: '123456'
     within 'form' do

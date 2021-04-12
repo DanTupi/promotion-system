@@ -1,7 +1,6 @@
 require 'application_system_test_case'
-#TODO: introduce I18n on test and views.
+# TODO: introduce I18n on test and views.
 class ProductCategoriesTest < ApplicationSystemTestCase
-
   test 'no product categories are available' do
     login_user
     visit root_path
@@ -72,7 +71,7 @@ class ProductCategoriesTest < ApplicationSystemTestCase
     click_on 'Criar Categoria'
 
     assert_text 'deve ser único'
-end
+  end
 
   test 'edit Product Category' do
     ProductCategory.create!(name: 'Livro', code: 'LIVR')
@@ -82,7 +81,7 @@ end
     click_on 'Categorias de Produtos'
     click_on 'Livro'
     click_on 'Editar Categoria'
-    
+
     fill_in 'Nome', with: 'Fogão'
     fill_in 'Código', with: 'FOG'
     click_on 'Atualizar Categoria de Produto'
@@ -92,7 +91,7 @@ end
     assert_text 'FOG'
   end
 
-  test 'to edit a product category, it must be valid'  do
+  test 'to edit a product category, it must be valid' do
     ProductCategory.create!(name: 'Livro', code: 'LIVR')
 
     login_user
@@ -100,7 +99,7 @@ end
     click_on 'Categorias de Produtos'
     click_on 'Livro'
     click_on 'Editar Categoria'
-    
+
     fill_in 'Nome', with: ''
     fill_in 'Código', with: ''
     click_on 'Atualizar Categoria de Produto'
@@ -113,7 +112,7 @@ end
 
     login_user
     visit product_category_path(product_category)
-    click_on "Excluir Categoria"
+    click_on 'Excluir Categoria'
     page.driver.browser.switch_to.alert.accept
 
     assert_current_path product_categories_path
@@ -121,5 +120,3 @@ end
     assert_no_text 'CANET'
   end
 end
-
-

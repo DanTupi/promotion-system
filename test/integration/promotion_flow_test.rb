@@ -3,25 +3,27 @@ require 'test_helper'
 class PromotionFlowTest < ActionDispatch::IntegrationTest
   test 'can create a promotion' do
     login_user
-    post '/promotions', params: { promotion: { 
-                                  name: 'Natal', description: 'Promoção de Natal',
-                                  code: 'NATAL10', discount_rate: 10,
-                                  coupon_quantity: 100,
-                                  expiration_date: '22/12/2033' }}
-    
+    post '/promotions', params: { promotion: {
+      name: 'Natal', description: 'Promoção de Natal',
+      code: 'NATAL10', discount_rate: 10,
+      coupon_quantity: 100,
+      expiration_date: '22/12/2033'
+    } }
+
     assert_redirected_to promotion_path(Promotion.last)
-    #assert_response :found
+    # assert_response :found
     follow_redirect!
-    #assert_response :success
+    # assert_response :success
     assert_select 'h3', 'Natal'
   end
 
   test 'cannot create a promotion without login' do
-    post '/promotions', params: { promotion: { 
-                                  name: 'Natal', description: 'Promoção de Natal',
-                                  code: 'NATAL10', discount_rate: 10,
-                                  coupon_quantity: 100,
-                                  expiration_date: '22/12/2033' }}
+    post '/promotions', params: { promotion: {
+      name: 'Natal', description: 'Promoção de Natal',
+      code: 'NATAL10', discount_rate: 10,
+      coupon_quantity: 100,
+      expiration_date: '22/12/2033'
+    } }
 
     assert_redirected_to new_user_session_path
   end
@@ -46,10 +48,10 @@ class PromotionFlowTest < ActionDispatch::IntegrationTest
                                   code: 'CYBER15', discount_rate: 15,
                                   expiration_date: '22/12/2033', user: user)
 
-    patch promotion_path(promotion), params: 
+    patch promotion_path(promotion), params:
       { promotion: { name: 'Natal', description: 'Promoção de natal',
-        code: 'NATAL10', discount_rate: 15, coupon_quantity: 5,
-        expiration_date: '22/12/2033' } }
+                     code: 'NATAL10', discount_rate: 15, coupon_quantity: 5,
+                     expiration_date: '22/12/2033' } }
     assert_redirected_to new_user_session_path
   end
 
@@ -63,8 +65,8 @@ class PromotionFlowTest < ActionDispatch::IntegrationTest
     delete promotion_path(promotion)
     assert_redirected_to new_user_session_path
   end
-  #TODO: success of all cases
-  #TODO: login test of the approval
+  # TODO: success of all cases
+  # TODO: login test of the approval
 
   test 'cannot approve if owner' do
     user = User.create!(email: 'custodio@iugu.com.br', password: '123456')
@@ -76,7 +78,7 @@ class PromotionFlowTest < ActionDispatch::IntegrationTest
     login_user(user)
     post approve_promotion_path(promotion)
     assert_redirected_to promotion_path(promotion)
-    refute promotion.reload.approved?
+    assert_not promotion.reload.approved?
     assert_equal 'Ação não permitida', flash[:alert]
   end
 end

@@ -8,14 +8,14 @@ class PromotionApiTest < ActionDispatch::IntegrationTest
   end
 
   test 'show all product_categories' do
-    p_category_01 = ProductCategory.create!(name: 'Carro', code: 'CARRO')
-    p_category_02 = ProductCategory.create!(name: 'Computador', code: 'CPU')
+    first_p_category = ProductCategory.create!(name: 'Carro', code: 'CARRO')
+    second_p_category = ProductCategory.create!(name: 'Computador', code: 'CPU')
 
     get api_v1_product_categories_path, as: :json
-    
+
     assert_response :success
     body = JSON.parse(response.body, symbolize_names: true)
-    assert_equal p_category_01.name, body.first[:name]
-    assert_equal p_category_02.name, body.last[:name]
+    assert_equal first_p_category.name, body.first[:name]
+    assert_equal second_p_category.name, body.last[:name]
   end
 end
